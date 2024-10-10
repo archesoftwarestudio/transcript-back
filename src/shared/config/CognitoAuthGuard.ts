@@ -22,6 +22,12 @@ export class CognitoAuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();
+
+    // Excluir el GET / del guard
+    if (request.method === 'GET' && request.path === '/') {
+      return true; // Permitir el acceso sin autenticación
+    }
+
     const authHeader = request.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
